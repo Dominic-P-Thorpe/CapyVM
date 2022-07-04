@@ -1,11 +1,6 @@
-#ifndef REGISTERS
-#define REGISTERS
-
 #include <stdio.h>
 #include <assert.h>
-
-
-short int registers[16];
+#include "registers.h"
 
 
 void initRegisters() {
@@ -62,8 +57,8 @@ int testRegisters() {
     setRegister(1, -20);
     assert(getRegister(1) == -20);
 
+    // reset registers
+    initRegisters();
+
     return 1;
 }
-
-
-#endif
