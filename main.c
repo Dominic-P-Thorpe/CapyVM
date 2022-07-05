@@ -29,7 +29,12 @@ void loadProgram(char* filename, short* ram) {
 
 
 int main(int argc, char* argv[]) {
-    if (strcmp(argv[0], "--test")) {
+    if (argc < 2) {
+        printf("Insufficient command-line arguments!\nUSAGE: ./capyVM _filename [--test]\n");
+        exit(0);
+    }
+
+    if (argc > 2 && strcmp(argv[2], "--test") == 0) {
         if (testRegisters() == 1 && testRAM() == 1)
             printf("All tests passed\n\n\n");
         else 
