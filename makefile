@@ -1,1 +1,1 @@
-gcc main.c registers.c -o capyVM
+gcc main.c registers.c ram.c -o capyVM

@@ -12,7 +12,7 @@ void initRegisters() {
 
 void printRegisters() {
     for (int i = 0; i < 16; i++) {
-        printf("%02d:   %05d\n", i, registers[i]);
+        printf("%X:   %05X\n", i, registers[i]);
     }
 }
 

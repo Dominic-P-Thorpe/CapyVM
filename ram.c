@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdio.h>
 #include "ram.h"
 
 
@@ -11,7 +12,7 @@ void initRAM() {
 
 void setRAM(short addr, short data) {
     if (addr < 0 || addr > 4095) 
-        print ("RAM address %d outside of permitted range 0-4096", addr);
+        printf("RAM address %d outside of permitted range 0-4096", addr);
     
     ram[addr] = data;
 }
@@ -19,13 +20,13 @@ void setRAM(short addr, short data) {
 
 short getRAM(short addr) {
     if (addr < 0 || addr > 4095) 
-        print ("RAM address %d outside of permitted range 0-4096", addr);
+        printf("RAM address %d outside of permitted range 0-4096", addr);
     
     return ram[addr];
 }
 
 
-int testRam() {
+int testRAM() {
     // test inititalising RAM
     initRAM();
     assert(ram[0] == 0);
@@ -37,7 +38,7 @@ int testRam() {
     setRAM(10, 30);
     setRAM(2000, 20);
     setRAM(4095, 50);
-    
+
     assert(getRAM(0) == 50);
     assert(getRAM(10) == 30);
     assert(getRAM(2000) == 20);
