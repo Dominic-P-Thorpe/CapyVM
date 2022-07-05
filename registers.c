@@ -7,12 +7,15 @@ void initRegisters() {
     for (int i = 0; i < 16; i++) {
         registers[i] = 0;
     }
+
+    registers[11] = 2047;
+    registers[13] = 2047;
 }
 
 
 void printRegisters() {
     for (int i = 0; i < 16; i++) {
-        printf("%X:   %05X\n", i, registers[i]);
+        printf("%X:   %04X\n", i, registers[i]);
     }
 }
 
@@ -44,6 +47,8 @@ int testRegisters() {
     assert(registers[2] == 0);
     assert(registers[10] == 0);
     assert(registers[15] == 0);
+    assert(registers[11] == 2047);
+    assert(registers[13] == 2047);
 
     // testing getting and setting registers
     setRegister(1, 20);
