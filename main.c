@@ -28,6 +28,130 @@ void loadProgram(char* filename, short* ram) {
 }
 
 
+void interpretRTypeInstr(unsigned short opcode, unsigned short instr, short* registers, short* ram) {
+    unsigned short Rd, Rs, Rt;
+    Rd = (instr & 0x0F00) >> 8;
+    Rs = (instr & 0x00F0) >> 4;
+    Rt = (instr & 0x000F);
+
+    switch (opcode) {
+        case 1: // ADD
+            registers[Rd] = registers[Rs] + registers[Rt];
+            break;
+        
+        case 2: // SUB
+            registers[Rd] = registers[Rs] - registers[Rt];
+            break;
+        
+        case 3: // AND
+            registers[Rd] = registers[Rs] & registers[Rt];
+            break;
+        
+        case 4: // OR
+            registers[Rd] = registers[Rs] | registers[Rt];
+            break;
+        
+        case 5: // XOR
+            registers[Rd] = registers[Rs] ^ registers[Rt];
+            break;
+        
+        case 6: // SLL
+            registers[Rd] = registers[Rs] << registers[Rt];
+            break;
+        
+        case 7: // SRL
+            registers[Rd] = registers[Rs] >> registers[Rt];
+            break;
+        
+        case 11: // LW
+            registers[Rd] = ram[registers[Rs]];
+            break;
+        
+        case 12: // SW
+            ram[registers[Rd]] = registers[Rs];
+            break;
+        
+        default:
+            printf("Invalid operand %d\n", opcode);
+            break;
+    }
+}
+
+
+void interpretITypeInstr(unsigned short opcode, unsigned short instr, short* registers, short* ram) {
+    unsigned short Rd, Rs, imm;
+    Rd = (instr & 0x0F00) >> 8;
+    Rs = (instr & 0x00F0) >> 4;
+    imm = (instr & 0x000F);
+
+    switch (opcode) {
+        case 8: // ADDI
+            registers[Rd] = registers[Rs] + imm;
+            break;
+        
+        case 9: // ANDI
+            registers[Rd] = registers[Rs] & imm;
+            break;
+        
+        case 10: // ORI
+            registers[Rd] = registers[Rs] | imm;
+            break;
+        
+        default:
+            printf("Invalid operand\n");
+            break;
+    }
+}
+
+
+void interpretJTypeInstr(unsigned short opcode, unsigned short instr, short* ram, unsigned short* programCounter) {
+    unsigned short addr = (instr & 0x0FFF);
+
+    switch (opcode) {        
+        case 13: // JMP
+            *programCounter = addr;
+            break;
+        
+        case 14: // BEQ
+            break;
+        
+        default:
+            printf("Invalid operand\n");
+            break;
+    }
+}
+
+
+// Iterates through every instruction in RAM and executes it using one of the helper functions.
+void runProgram(short* registers, short* ram) {
+    unsigned short programCounter = 0;
+    unsigned short currentInstruction = 0;
+    unsigned short opcode;
+    while (programCounter < 4096) {
+        currentInstruction = ram[programCounter];
+
+        // HALT
+        if (currentInstruction == 0x0000)
+            break;
+        
+        opcode = (currentInstruction & 0xF000) >> 12;
+        if ((opcode >= 1 && opcode < 8) || opcode == 11 || opcode == 12)
+            interpretRTypeInstr(opcode, currentInstruction, registers, ram);
+        else if (opcode < 11)
+            interpretITypeInstr(opcode, currentInstruction, registers, ram);
+        else if (opcode < 16) 
+            interpretJTypeInstr(opcode, currentInstruction, ram, &programCounter);
+        else {
+            printf("Invalid opcode %d\n", opcode);
+            exit(0);
+        }
+
+        if (opcode != 14 || opcode != 15)
+            programCounter++;
+    } 
+}
+
+
 int main(int argc, char* argv[]) {
     if (argc < 2) {
         printf("Insufficient command-line arguments!\nUSAGE: ./capyVM _filename [--test]\n");
@@ -42,8 +166,8 @@ int main(int argc, char* argv[]) {
     }
 
     initRegisters();
-    loadProgram("test.asm", ram);
-    printf("%X\n%X\n%X\n", ram[0], ram[1], ram[2]);
+    loadProgram(argv[1], ram);
+    runProgram(registers, ram);
 
-    // printRegisters();
+    printRegisters();
 }

@@ -25,7 +25,7 @@ R-type instructions take 3 registers as arguments:
 
 I-type instructions are the same except *Rt* is replaced by *Imm* which is a fixed value hardcoded into the instruction.
 
-J-type instructions take only an argument called *Addr* which is a 12-bit address for a location in memory. The entirety of memory can be addressed.
+A-type instructions take only an argument called *Addr* which is a 12-bit address for a location in memory. The entirety of memory can be addressed.
 
 | Type   | 0-3 | 4-7 | 8-11 | 12-15     |
 |--------|-----|-----|------|-----------|
@@ -35,22 +35,23 @@ J-type instructions take only an argument called *Addr* which is a 12-bit addres
 
 The instructions are as follows:
 
-| Name | Opcode | Type   | Explanation     |
-|------|--------|--------|-----------------|
-| ADD  | 0000   | R-Type | Rd = Rs + Rt 
-| SUB  | 0001   | R-Type | Rd = Rs - Rt
-| AND  | 0010   | R-Type | Rd = Rs && Rt
-| OR   | 0011   | R-Type | Rd = Rs || Rt
-| XOR  | 0100   | R-Type | Rd = Rs XOR Rt
-| LW   | 0101   | J-Type | Rd = Value of Addr in RAM
-| SW   | 0110   | I-Type | Addr in RAM = Rd
-| BEQ  | 0111   | J-Type | PC = Addr if 0 flag is set
-| ADDI | 1000   | I-Type | Rd = Rs + Imm
-| ANDI | 1001   | I-Type | Rd = Rs && Imm
-| ORI  | 1010   | I-Type | Rd = Rs || Imm
-| SLL  | 1011   | R-Type | Rd = Rs >> Rt
-| SRL  | 1100   | R-Type | Rd = Rs >> Rt
-| JMP  | 1101   | J-Type | PC = Addr 
+| Name | Opcode | Type   | Explanation                |
+|------|--------|--------|----------------------------|
+| HALT | 0000   | N/A    | Stops program execution    |
+| ADD  | 0001   | R-Type | Rd = Rs + Rt               |
+| SUB  | 0010   | R-Type | Rd = Rs - Rt               |
+| AND  | 0011   | R-Type | Rd = Rs && Rt              |
+| OR   | 0100   | R-Type | Rd = Rs || Rt              |
+| XOR  | 0101   | R-Type | Rd = Rs XOR Rt             |
+| SLL  | 0110   | R-Type | Rd = Rs << Rt              |
+| SRL  | 0111   | R-Type | Rd = Rs >> Rt              |
+| ADDI | 1000   | I-Type | Rd = Rs + Imm              |
+| ANDI | 1001   | I-Type | Rd = Rs && Imm             |
+| ORI  | 1010   | I-Type | Rd = Rs || Imm             |
+| LW   | 1011   | R-Type | Rd = Value of Addr in RAM  |
+| SW   | 1100   | R-Type | Addr in RAM = Rd           |
+| JMP  | 1101   | J-Type | PC = Addr                  |
+| BEQ  | 1110   | J-Type | PC = Addr if 0 flag is set |
 
 
 ### Registers

@@ -2,7 +2,7 @@
 #define REGISTERS
 
 
-short int registers[16];
+short registers[16];
 
 void initRegisters();
 void printRegisters();
